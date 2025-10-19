@@ -8,6 +8,8 @@
 #include "Components/Input/WarriorInputComponent.h"
 #include "WarriorGameplayTags.h"
 #include "AbilitySystem/WarriorAbilitySystemComponent.h"
+#include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
+#include "Components/Combat/HeroCombatComponent.h"
 
 #include "WarriorDebugHelper.h"
 
@@ -32,15 +34,16 @@ AWarriorHeroCharacter::AWarriorHeroCharacter() {
     GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
     GetCharacterMovement()->MaxWalkSpeed = 400.f;
     GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+
+    HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
 }
 
 void AWarriorHeroCharacter::PossessedBy(AController* NewController) {
     Super::PossessedBy(NewController);
-    if (WarriorAbilitySystemComponent && WarriorAttributeSet) {
-        const FString ASCText = FString::Printf(TEXT("Owner Actor: %s, Avatar Actor : %s."), *WarriorAbilitySystemComponent->GetOwnerActor()->GetActorLabel(), *WarriorAbilitySystemComponent->GetAvatarActor()->GetActorLabel());
-        Debug::Print(TEXT("Abilty system component valid. ") + ASCText, FColor::Green);
-
-        Debug::Print(TEXT("AttributeSet valid. ") + ASCText, FColor::Green);
+    if (!CharacterStartUpData.IsNull()) {
+        if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.LoadSynchronous()) {
+            LoadedData->GiveToAbilitySystemComponent(WarriorAbilitySystemComponent);
+        }
     }
 }
 
