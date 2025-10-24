@@ -28,6 +28,6 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "WarriorAbility")
     EWarriorAbiltyActivationPolicy AbiltyActivationPolicy = EWarriorAbiltyActivationPolicy::OnTriggered;
 
-    UFUNCTION(BlueprinPure, Category = "Warrior|Ability")
+    UFUNCTION(BlueprintPure, Category = "Warrior|Ability")
     UPawnCombatComponent* GetPawnCombatComponentFromActorInfo() const;
 };
