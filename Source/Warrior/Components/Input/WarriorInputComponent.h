@@ -35,7 +35,7 @@ template<class UserObject, typename CallbackFunc>
 inline void UWarriorInputComponent::BindAbilityInputAction(const UDataAsset_InputConfig* InInputConfig, UserObject* ContextObject, CallbackFunc InputPressedFunc, CallbackFunc InputRelasedFunc) {
     checkf(InInputConfig, TEXT("Input config data asset is null, can not proceed"));
     for (const FWarriorInputActionConfig& AbilityInputActionConfig : InInputConfig->AbilityInputActions) {
-        if (!AbilityInputActionConfig.isValid) continue;
+        if (!AbilityInputActionConfig.isValid()) continue;
         BindAction(AbilityInputActionConfig.InputAction, ETriggerEvent::Started, ContextObject, InputPressedFunc, AbilityInputActionConfig.InputTag);
         BindAction(AbilityInputActionConfig.InputAction, ETriggerEvent::Completed, ContextObject, InputRelasedFunc, AbilityInputActionConfig.InputTag);
     }

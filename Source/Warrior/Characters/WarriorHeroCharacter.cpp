@@ -40,6 +40,7 @@ AWarriorHeroCharacter::AWarriorHeroCharacter() {
 
 void AWarriorHeroCharacter::PossessedBy(AController* NewController) {
     Super::PossessedBy(NewController);
+
     if (!CharacterStartUpData.IsNull()) {
         if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.LoadSynchronous()) {
             LoadedData->GiveToAbilitySystemComponent(WarriorAbilitySystemComponent);
@@ -51,14 +52,19 @@ void AWarriorHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
     checkf(InputConfigDataAsset, TEXT("Forgot to assign a valid data asset as input config"));
 
     ULocalPlayer* LocalPlayer = GetController<APlayerController>()->GetLocalPlayer();
+
     UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+
     check(Subsystem);
+
     Subsystem->AddMappingContext(InputConfigDataAsset->DefaultMappingContext, 0);
 
     UWarriorInputComponent* WarriorInputComponent = CastChecked<UWarriorInputComponent>(PlayerInputComponent);
 
     WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
     WarriorInputComponent->BindNativeInputAction(InputConfigDataAsset, WarriorGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
+
+    WarriorInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 }
 
 void AWarriorHeroCharacter::BeginPlay() {
@@ -93,4 +99,12 @@ void AWarriorHeroCharacter::Input_Look(const FInputActionValue& InputActionValue
     if (LookAxisVector.Y != 0.f) {
         AddControllerPitchInput(LookAxisVector.Y);
     }
+}
+
+void AWarriorHeroCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag) {
+    WarriorAbilitySystemComponent->OnAbilityInputPressed(InInputTag);
+}
+
+void AWarriorHeroCharacter::Input_AbilityInputReleased(FGameplayTag InInputTag) {
+    WarriorAbilitySystemComponent->OnAbilityInputReleased(InInputTag);
 }
