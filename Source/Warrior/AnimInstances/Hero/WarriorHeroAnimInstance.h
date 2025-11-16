@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AnimInstance/WarriorCharacterAnimInstance.h"
+#include "AnimInstances/WarriorCharacterAnimInstance.h"
 #include "WarriorHeroAnimInstance.generated.h"
 class AWarriorHeroCharacter;
 /**

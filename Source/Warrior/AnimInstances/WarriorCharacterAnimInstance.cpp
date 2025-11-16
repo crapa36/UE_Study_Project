@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "AnimInstance/WarriorCharacterAnimInstance.h"
+#include "AnimInstances/WarriorCharacterAnimInstance.h"
 #include "Characters/WarriorBaseCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
